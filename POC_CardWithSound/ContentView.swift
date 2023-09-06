@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
 
         WordCardView(
             wordCard: WordCard(
                 name: "Correr",
-                pictogramName: "correr",
+                pictogramName: colorScheme == .dark ? "correrPreto" : "correrBranco",
                 categoryld: UUID(),
                 subCategoryld: UUID()
             )

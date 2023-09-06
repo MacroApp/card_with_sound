@@ -11,17 +11,20 @@ import AVFoundation
 struct WordCardView: View {
     
     var wordCard: WordCard
-    @State private var offset = CGSize.zero
+    @Environment(\.colorScheme) var colorScheme
+    @State private var cardPosition: CGSize = .zero
+    @State private var gestureOffset: CGSize = .zero
     private let synthesizer = AVSpeechSynthesizer()
 
     var body: some View {
 
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(UIColor.red))
-                .frame(width: 100, height: 150) // Ajuste o tamanho do card conforme necessário
-                .shadow(color: Color.gray.opacity(0.4), radius: 4, x: 0, y: 2)
-//                .offset(offset)
+//            RoundedRectangle(cornerRadius: 10)
+////                .fill(Color(UIColor.red))
+//                .fill(colorScheme == .light ? Color.black : Color.white)
+//                .frame(width: 100, height: 150) // Ajuste o tamanho do card conforme necessário
+//                .shadow(color: Color.gray.opacity(0.4), radius: 4, x: 0, y: 2)
+//            //                .offset(offset)
 
             VStack {
                 Image(wordCard.pictogramName)
@@ -30,21 +33,29 @@ struct WordCardView: View {
                     .frame(width: 80, height: 80) // Ajuste o tamanho da imagem conforme necessário
 
                 Text(wordCard.name)
+//                    .fixedSize(horizontal: false, vertical: true) // Permita expansão vertical
+                    .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
+//                    .foregroundColor(Color(UIColor.label))
                     .font(.headline)
                     .padding(.top, 10) // Ajuste o espaçamento conforme necessário
-                    .foregroundColor(Color(UIColor.label))
-
-                
             }
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 11)
+                .fill(colorScheme == .light ? Color.black : Color.white)
+            )
         }
-        .offset(offset)
+
+        .offset(cardPosition)
         .gesture(
             DragGesture() // Adicionando um gesto de arrastar
                 .onChanged { value in
-                    offset = value.translation // Atualizando o estado com a posição de arrasto
+
+                    // Atualizando o estado com a posição de arrasto
+                    cardPosition.width = value.translation.width + gestureOffset.width
+                    cardPosition.height = value.translation.height + gestureOffset.height
                 }
                 .onEnded { _ in
-                    offset = .zero // Resetando o deslocamento quando o arrasto é encerrado
+                    gestureOffset = cardPosition // Resetando o deslocamento quando o arrasto é encerrado
                 }
         )
 
