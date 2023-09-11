@@ -7,12 +7,11 @@
 
 import Foundation
 
-class WordCard {
+class WordCard: Identifiable {
 
+    var id = UUID()
     var name: String
     let pictogramName: String
-//    let pictogram: UIImage
-//    let pictogramURL: URL?
     let categoryld: UUID
     let subCategoryld: UUID
     let usageCount: Int64 = 0
@@ -28,9 +27,4 @@ class WordCard {
         self.categoryld = categoryld
         self.subCategoryld = subCategoryld
     }
-
-    func incrementUsageCount() -> Bool {
-        return true
-    }
-
 }
